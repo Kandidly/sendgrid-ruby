@@ -44,9 +44,13 @@ module SendGrid
           # API key
           req.headers['Authorization'] = "Bearer #{api_key}"
         end
+        payload = payload.to_json unless payload.is_a?(String)
         req.body = payload
       end
-      fail SendGrid::Exception, res.body if raise_exceptions? && res.status != 200
+
+      puts res.inspect
+
+      fail SendGrid::Exception, res.body if raise_exceptions? && !(res.status.to_s =~ /^2\d\d/)
 
       SendGrid::Response.new(code: res.status, headers: res.headers, body: res.body)
     end

@@ -22,6 +22,25 @@ module SendGrid
     end
 
     def send(mail)
+      # res = conn.post do |req|
+      #   payload = mail.to_h
+      #   req.url(endpoint)
+
+      #   # Check if using username + password or API key
+      #   if api_user
+      #     # Username + password
+      #     payload = payload.merge(api_user: api_user, api_key: api_key)
+      #   else
+      #     # API key
+      #     req.headers['Authorization'] = "Bearer #{api_key}"
+      #   end
+
+      #   req.body = payload
+      # end
+
+      # fail SendGrid::Exception, res.body if raise_exceptions? && res.status != 200
+
+      # SendGrid::Response.new(code: res.status, headers: res.headers, body: res.body)
       post(endpoint, mail.to_h)
     end
 
@@ -44,8 +63,9 @@ module SendGrid
           # API key
           req.headers['Authorization'] = "Bearer #{api_key}"
         end
-        payload = payload.to_json unless payload.is_a?(String)
+        payload = payload.to_json if payload.is_a?(Array)
         req.body = payload
+        puts req.inspect
       end
 
       puts res.inspect

@@ -65,10 +65,7 @@ module SendGrid
         end
         payload = payload.to_json if payload.is_a?(Array)
         req.body = payload
-        puts req.inspect
       end
-
-      puts res.inspect
 
       fail SendGrid::Exception, res.body if raise_exceptions? && !(res.status.to_s =~ /^2\d\d/)
 
